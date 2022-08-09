@@ -4632,23 +4632,9 @@ static inline void keccak256(uchar *digest, uchar const *message)
 }
 
 static inline bool hasTotal(
-  uchar const one, uchar const two, uchar const three, uchar const four,
-  uchar const five, uchar const six, uchar const seven, uchar const eight,
-  uchar const nine, uchar const ten, uchar const eleven, uchar const twelve,
-  uchar const thirteen, uchar const fourteen, uchar const fifteen,
-  uchar const sixteen, uchar const seventeen, uchar const eighteen,
-  uchar const nineteen, uchar const twenty, __constant uchar const *leading
+  uchar const one, uchar const two, uchar const three, uchar const four
 ) {
-  return (
-    (
-      (one == 0x00) + (two == 0x00) + (three == 0x00) + (four == 0x00) +
-      (five == 0x00) + (six == 0x00) + (seven == 0x00) + (eight == 0x00) +
-      (nine == 0x00) + (ten == 0x00) + (eleven == 0x00) + (twelve == 0x00) +
-      (thirteen == 0x00) + (fourteen == 0x00) + (fifteen == 0x00) +
-      (sixteen == 0x00) + (seventeen == 0x00) + (eighteen == 0x00) +
-      (nineteen == 0x00) + (twenty == 0x00)
-    ) >= leading[1]
-  );
+  return ((((one == 0x69) + (two == 0x42) + (three == 0x00) + (four == 0x00)) == 4));
 }
 
 static inline bool hasLeading(uchar const *left, __constant uchar const *leading)
@@ -4694,14 +4680,7 @@ __kernel void hashMessage(
   keccak256(digest, message);
 
   // determine if the address meets the constraints
-  if (hasLeading(digest, d_target) || hasTotal(
-    digest[0], digest[1], digest[2],
-    digest[3], digest[4], digest[5],
-    digest[6], digest[7], digest[8],
-    digest[9], digest[10], digest[11],
-    digest[12], digest[13], digest[14],
-    digest[15], digest[16], digest[17],
-    digest[18], digest[19], d_target))
+  if (hasTotal(digest[0], digest[1], digest[2],digest[3]))
   {
     if (solutionCount[0] < MAX_SOLUTIONS)
     {
